@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	</head>
+	<body>
+	
+		<script type="text/javascript">
+			/*创造了1个元素*/
+			var page1 = document.createElement("div");
+			/*设置类名*/
+			page1.className = "page1";
+			/*设置ID*/
+			page1.id = "page1";
+			
+			var pageTop = document.createElement("div")
+			pageTop.className = "pageTop";
+			pageTop.id = "pageTop";
+			pageTop.innerHTML = "<div class='time'><img src='img/countdown_time.png' /><span>10s</span></div>"+ 
+								"<div class='share'><img src='img/countdown_share.png'/></div>"+
+								"<div class='startGame'><img src='img/game_btn_star.png'/></div>"+
+								"<div class='jihui'>剩余<span>5</span>次机会</div>";
+			
+			/*将pageTop元素对象添加进page1元素里*/
+			page1.appendChild(pageTop);
+			/*将page1添加进body*/
+			document.body.appendChild(page1);
+			
+			
+			var mice = document.createElement("div");
+			mice.className = "mice";
+			mice.id = 'mice';
+			var str = "";
+			
+			for(var i = 0;i<12;i++){
+				str = str + "<div><img id='ds"+ i +"' src='img/vendor_people00.png' /></div>"
+			}
+			mice.innerHTML = str;
+			
+			
+			page1.appendChild(mice);
+			
+			
+			/*获取所需要用到的元素*/
+			var startBtn = document.querySelector(".startGame");
+			var timeSpan = document.querySelector(".time span");
+			var randomNum;
+			var score = 0;
+			var orClick = false;
+			
+			var endGame = function(){
+				var endImg = document.createElement("div");
+				endImg.id = "endDiv";
+				endImg.innerHTML = '<img src="img/pop_score_bg.png" />'+
+										'<h3>'+score+'分</h3>'+
+										'<h2 id="again">再来一次</h2>';
+				
+				document.body.appendChild(endImg);
+				
+			
+				document.querySelector("#again").onclick = function(){
+					//console.log(window);
+					location.reload();
+				}
+				
+			}
+			
+			/*开始按钮后执行的内容*/
+			var startEvent = function(){
+				startBtn.style.display = "none";
+				var num = 10;
+				var clearTime = setInterval(function(){
+					orClick = false;
+					for(var i = 0;i<12;i++){
+						document.querySelector("#ds"+i).src = "img/vendor_people00.png";
+					}
+					
+					timeSpan.innerHTML = num +"s";
+					num--;
+					if(num < 0){
+						/*这是清除计时器的方法*/
+						clearInterval(clearTime);
+						console.log(score);
+						
+						endGame()		
+						
+					}
+					
+					/*随机出0-11的随机整数*/
+					randomNum = parseInt(Math.random()*12);
+					document.querySelector("#ds"+randomNum).src = "img/vendor_hole01.png";
+							
+				},1000)
+				
+				/*击打老鼠的事件*/
+				var clickMice = function(event){
+					console.log(event.target.id);
+					var str = "ds" +  randomNum;
+					/*点击的ID要相等，然后只点过一次*/
+					if(event.target.id == str&&!orClick){
+						event.target.src = "img/vendor_hole02.png";
+						score+=100;
+						orClick = true;
+					}
+					
+				}
+				
+				mice.addEventListener("click",clickMice)
+				
+			}
+			
+			/*开始按钮事件*/
+			startBtn.addEventListener("click",startEvent)
+			
+			/*间隔函数*/
+			console.log(parseInt(Math.random()*12))
+			
+			
+			
+		</script>
+	</body>
+</html>
